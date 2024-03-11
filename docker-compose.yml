@@ -1,0 +1,32 @@
+version: "2.1"
+services:
+  rabbitmq:
+    image: rabbitmq:3.10.7-management
+    container_name: feedback-rabbitmq
+    restart: always
+    healthcheck:
+      test:  rabbitmq-diagnostics check_port_connectivity
+      interval: 30s
+      timeout: 30s
+      retries: 3
+    environment:
+      RABBITMQ_DEFAULT_USER: ${AMQP_USER}
+      RABBITMQ_DEFAULT_PASS: ${AMQP_PASSWORD}
+      RABBITMQ_SERVER_ADDITIONAL_ERL_ARGS: -rabbit log_levels [{connection,error},{default,error}] disk_free_limit 2147483648
+    volumes:
+      - rabbitmq:/var/lib/rabbitmq
+    ports:
+      - 15672:15672
+      - 5672:5672
+
+  email-sender:
+    container_name: feedback-email-sender
+    restart: always
+    build: .
+    depends_on:
+       rabbitmq:
+        condition: service_healthy
+    ports:
+      - 3700:3700
+volumes:
+  rabbitmq:        

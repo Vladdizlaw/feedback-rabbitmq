@@ -1,0 +1,8 @@
+/node_modules
+/dist
+/rabbitmq
+*.log
+/.vscode
+/.env.*
+.env.*
+/rabbitmq
