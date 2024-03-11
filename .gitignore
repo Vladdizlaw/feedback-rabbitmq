@@ -4,5 +4,6 @@
 *.log
 /.vscode
 /.env.*
+.env
 .env.*
 /rabbitmq
