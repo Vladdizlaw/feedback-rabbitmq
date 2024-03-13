@@ -1,9 +1,9 @@
 import amqp from "amqplib";
-import { amqpConfig } from "./configs/amqp.config";
+import { amqpConfig } from "./configs/amqp.config"
 import emailService from './services/email.service'
 import renderService from './services/render.service'
-import { randomUUID } from "crypto";
-
+import { randomUUID } from "crypto"
+import logger from './utils/logger'
 
 (async () => {
     try {
@@ -27,8 +27,10 @@ import { randomUUID } from "crypto";
                         const result: Record<string, string> = await emailService.sendEmail({ to, subject, html })
                         channel.ack(message);
                         console.log(`Message sent : ${result?.accepted}`)
+                        logger.info(`Message sent : ${JSON.stringify(result)}`)
                     } catch (err) {
                         console.log(err)
+                        logger.error(JSON.stringify(err))
                     }
                     console.timeEnd(label)
                 }
@@ -38,6 +40,7 @@ import { randomUUID } from "crypto";
         console.log(" [*] Waiting for messages. To exit press CTRL+C");
     } catch (err) {
         console.log(err);
+        logger.error(JSON.stringify(err))
     }
 })()
 

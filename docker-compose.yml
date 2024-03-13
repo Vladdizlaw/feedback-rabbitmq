@@ -26,7 +26,10 @@ services:
     depends_on:
        rabbitmq:
         condition: service_healthy
+    volumes:
+      - email-sender:/app/dist/logs    
     ports:
       - 3700:3700
 volumes:
-  rabbitmq:        
+  rabbitmq:
+  email-sender:        
